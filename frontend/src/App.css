@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@theme {
+  --color-primary: #113d72;
+  --color-secondary: #2074d8;
+  --color-accent: #9013fe;
+  --color-background: #ffffff;
+  --color-success: #34a853;
+  --color-error: #dd172e;
+  --color-orange: #ff8c00;
+  --color-warning: #c5172e;
+}
+
+.background-img {
+  background-image: url("../src/assets/images/bg1.png");
+  background-size: cover;
+  background-position: center;
+}
+
+
+.main-content {
+  position: relative;
+  z-index: 1;
+}
+
+@import "@fontsource-variable/inter";
+
+body {
+  font-family: "Inter", sans-serif;
+}
