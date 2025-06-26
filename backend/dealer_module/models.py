@@ -147,6 +147,7 @@ class Blacklist(models.Model):
 # Bearer Rate Table
 class SIA_DL_BEARER_RATE(models.Model):
     ID = models.AutoField(primary_key=True, db_column='ID')
+    BEARER_RATE_ID = models.CharField(max_length=50, db_column='BEARER_RATE_ID')
     SERVICE_TYPE = models.CharField(max_length=50, db_column='SERVICE_TYPE')
     ORDER_TYPE = models.CharField(max_length=50, db_column='ORDER_TYPE')
     COMPLIANCE = models.CharField(max_length=1, default='P', db_column='COMPLIANCE')
