@@ -53,7 +53,7 @@ export const getSlabDemarcationData = async (setSlabDemarcationResponse) => {
 // Blacklist Package data
 export const getBlacklistPackageData = async (setBlacklistPackageResponse) => {
   try {
-    let columns = ["RULE_ID", "STAGE_LEVEL", "STATUS"];
+    let columns = ["RULE_ID", "TARIFF_ID", "STATUS"];
     const response = await fetchData(VITE_SIA_BLACKLIST_PACKAGES_URL);
     let data = {
       columns: columns,
@@ -61,7 +61,7 @@ export const getBlacklistPackageData = async (setBlacklistPackageResponse) => {
         .filter((item) => item.STATUS === "Active")
         .map((item) => ({
           ONE: item.ID,
-          TWO: item.STAGE_LEVEL,
+          TWO: item.TARIFF_ID,
           STATUS: item.STATUS,
         })),
     };
@@ -74,7 +74,7 @@ export const getBlacklistPackageData = async (setBlacklistPackageResponse) => {
 // Package Rates data
 export const getPackageRatesData = async (setPackageRatesResponse) => {
   try {
-    let columns = ["RULE_ID", "STAGE_LEVEL", "STATUS"];
+    let columns = ["RULE_ID", "TARIFF_ID", "STATUS"];
     const response = await fetchData(VITE_SIA_PACKAGE_RATES_URL);
     let data = {
       columns: columns,
@@ -82,7 +82,7 @@ export const getPackageRatesData = async (setPackageRatesResponse) => {
         .filter((item) => item.STATUS === "Active")
         .map((item) => ({
           ONE: item.ID,
-          TWO: item.STAGE_LEVEL,
+          TWO: item.TARIFF_ID,
           STATUS: item.STATUS,
         })),
     };
@@ -95,7 +95,7 @@ export const getPackageRatesData = async (setPackageRatesResponse) => {
 // Bearer Rates Data
 export const getBearerRatesData = async (setBearerRatesResponse) => {
   try {
-    let columns = ["RULE_ID", "TARIFF_ID", "STATUS"];
+    let columns = ["RULE_ID", "SLAB_LEVEL", "STATUS"];
     const response = await fetchData(VITE_SIA_BEARER_RATES_URL);
     let data = {
       columns: columns,
@@ -103,7 +103,7 @@ export const getBearerRatesData = async (setBearerRatesResponse) => {
         .filter((item) => item.STATUS === "Active")
         .map((item) => ({
           ONE: item.ID,
-          TWO: item.TARIFF_ID,
+          TWO: item.SLAB_LEVEL,
           STATUS: item.STATUS,
         })),
     };
