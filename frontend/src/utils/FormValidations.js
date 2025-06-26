@@ -18,7 +18,7 @@ export const validations = (
 
   //product eligibility validation
   if (ruleName === "productEligibility") {
-    if (!data.TARIFF_ID?.trim()) {
+    if (!data.SO_TYPE_ID?.trim()) {
       errors.push("Tariff ID is required");
     } else if (!digitsOnly.test(data.TARIFF_ID)) {
       errors.push("Tariff ID must contain digits only");
@@ -30,11 +30,7 @@ export const validations = (
       errors.push("Product must contain only letters, numbers, and spaces");
     }
 
-    if (!data.SALES_TYPE?.trim()) {
-      errors.push("Sales Type is required");
-    } else if (!alpha.test(data.SALES_TYPE)) {
-      errors.push("Sales Type must contain only letters");
-    }
+  
 
     if (!data.SERVICE_TYPE?.trim()) {
       errors.push("Service Type is required");
@@ -64,11 +60,11 @@ export const validations = (
     // Duplicate check (only during creation)
     if (existingEntries) {
       const duplicate = existingEntries.some(
-        (item) => item.TARIFF_ID === data.TARIFF_ID
+        (item) => item.SO_TYPE_ID === data.SO_TYPE_ID
       );
 
       if (duplicate) {
-        errors.push("This Product with the same Tariff ID already exists.");
+        errors.push("This Product with the same types ID already exists.");
       }
     }
 
