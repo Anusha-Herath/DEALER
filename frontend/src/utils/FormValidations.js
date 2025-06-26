@@ -1,4 +1,3 @@
-// product eligibility validations
 export const validations = (
   data,
   ruleName,
@@ -16,8 +15,8 @@ export const validations = (
   const digitsOnly = /^[0-9]+$/; //must contain digits only
   const floatNumber = /^\d+(\.\d{1,2})?$/; // must contain a float number with max 2 decimal places
 
-  //product eligibility validation
-  if (ruleName === "productEligibility") {
+  //service order type validation
+  if (ruleName === "serviceordertypes") {
     if (!data.SO_TYPE_ID?.trim()) {
       errors.push("Tariff ID is required");
     } else if (!digitsOnly.test(data.TARIFF_ID)) {
@@ -71,8 +70,8 @@ export const validations = (
     return errors;
   }
 
-  // slab level validation
-  if (ruleName === "slabLevel") {
+  // slab demarcation validation
+  if (ruleName === "slabdemarcation") {
     if (!data.SLAB_ID?.trim()) {
       errors.push("SLAB ID is required");
     } else if (!digitsOnly.test(data.SLAB_ID)) {
@@ -95,12 +94,6 @@ export const validations = (
       errors.push("Lower Range is required");
     } else if (!floatNumber.test(data.LOWER_RANGE)) {
       errors.push("Lower Range must contain only numbers");
-    }
-
-    if (!data.PERCENTAGE?.trim()) {
-      errors.push("Percentage is required");
-    } else if (!floatNumber.test(data.PERCENTAGE)) {
-      errors.push("Percentage must be float value");
     }
 
     if (isUpdate) {
@@ -129,30 +122,24 @@ export const validations = (
 
     return errors;
   }
-  // payment stages validations
-  if (ruleName === "paymentStages") {
-    if (!safe(data.STAGE_ID)) {
-      errors.push("Stage ID is required");
-    } else if (!digitsOnly.test(safe(data.STAGE_ID))) {
-      errors.push("Stage ID must contain digits only");
+  // blacklist package validations
+  if (ruleName === "blacklistpackage") {
+    if (!safe(data.BLP_ID)) {
+      errors.push("BLP ID is required");
+    } else if (!digitsOnly.test(safe(data.BLP_ID))) {
+      errors.push("BLP ID must contain digits only");
     }
 
-    if (!safe(data.STAGE_LEVEL)) {
-      errors.push("Stage level is required");
-    } else if (!digitsOnly.test(safe(data.STAGE_LEVEL))) {
-      errors.push("Stage level must contain only numbers");
+    if (!safe(data.TARIFF_ID)) {
+      errors.push("tariff is required");
+    } else if (!digitsOnly.test(safe(data.TARIFF_ID))) {
+      errors.push("tariff ID must contain only numbers");
     }
 
-    if (!safe(data.DAY_COUNT)) {
-      errors.push("Day Count is required");
-    } else if (!floatNumber.test(safe(data.DAY_COUNT))) {
-      errors.push("Day Count must be a valid number");
-    }
-
-    if (!safe(data.PERCENTAGE)) {
-      errors.push("Percentage is required");
-    } else if (!floatNumber.test(safe(data.PERCENTAGE))) {
-      errors.push("Percentage must be a float or integer number");
+    if (!safe(data.PACKAGE_NAME)) {
+      errors.push("package name is required");
+    } else if (!digitsOnly.test(safe(data.PACKAGE_NAME))) {
+      errors.push("package name must be in numbers");
     }
 
     if (isUpdate) {
@@ -172,34 +159,46 @@ export const validations = (
     // Duplicate check only during creation
     if (!isUpdate && existingEntries) {
       const duplicate = existingEntries.some(
-        (item) => String(item.STAGE_ID).trim() === safe(data.STAGE_ID)
+        (item) => String(item.BLP_ID).trim() === safe(data.BLP_ID)
       );
       if (duplicate) {
-        errors.push("A Payment Stage with the same STAGE ID already exists.");
+        errors.push("Blacklist package with the same Blacklist package id already exists.");
       }
     }
 
     return errors;
   }
 
-  //exclusion packages validation
-  if (ruleName === "exclusionPackages") {
-    if (!data.EXP_ID?.toString().trim()) {
-      errors.push("EXP ID is required");
-    } else if (!digitsOnly.test(data.EXP_ID)) {
-      errors.push("EXP ID must contain digits only");
+  //bearer rates validation
+  if (ruleName === "bearerrates") {
+    if (!data.BEARER_RATES_ID?.toString().trim()) {
+      errors.push("Bearer rates ID is required");
+    } else if (!digitsOnly.test(data.BEARER_RATES_ID)) {
+      errors.push("bearer rates must contain digits only");
     }
 
-    if (!data.TARIFF_ID?.toString().trim()) {
-      errors.push("Tariff ID is required");
-    } else if (!alphanum.test(data.TARIFF_ID)) {
-      errors.push("Tariff ID must be alphanumeric");
+     if (!data.SERVICE_TYPE?.trim()) {
+      errors.push("Service Type is required");
+    } else if (!alpha.test(data.SERVICE_TYPE)) {
+      errors.push("Service Type must contain only letters");
     }
 
-    if (!data.TARIFF_NAME?.toString().trim()) {
-      errors.push("Tariff Name is required");
-    } else if (!alpha.test(data.TARIFF_NAME)) {
-      errors.push("Tariff Name must contain only letters and spaces");
+    if (!data.ORDER_TYPE?.trim()) {
+      errors.push("Order Type is required");
+    } else if (!alpha.test(data.ORDER_TYPE)) {
+      errors.push("Order Type must contain only letters");
+    }
+
+    if (!data.COMPILANCE?.toString().trim()) {
+      errors.push("Compilance is required");
+    } else if (!alpha.test(data.COMPILANCE)) {
+      errors.push("compilance must contain only letters and spaces");
+    }
+
+     if (!data.RATES_UNDER_SLAB_LEVELS?.toString().trim()) {
+      errors.push("Compilance is required");
+    } else if (!alpha.test(data.RATES_UNDER_SLAB_LEVELS)) {
+      errors.push("compilance must contain only letters and spaces");
     }
 
     if (isUpdate) {
