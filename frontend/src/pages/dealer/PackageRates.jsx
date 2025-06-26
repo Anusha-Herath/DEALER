@@ -1,3 +1,5 @@
+
+
 // import React, { useEffect, useState } from "react";
 // import PageHeader from "../../components/common/PageHeader";
 // import ActionTable from "../../components/common/ActionTable";
@@ -20,15 +22,12 @@
 
 // function PackageRates() {
 //   const { openModal, closeModal } = useModal();
-
-//   // State declarations
 //   const [response, setResponse] = useState([]);
 //   const [searchQuery, setSearchQuery] = useState("");
 //   const [statusFilter, setStatusFilter] = useState("Active");
 //   const [loading, setLoading] = useState(false);
 
-//   // API URL
-//   const  VITE_SIA_PACKAGE_RATES_URL = "http://127.0.0.1:8000/api/package-rates/";
+//   const  VITE_SIA_PACKAGE_RATES_URL = 'http://127.0.0.1:8000/api/package-rates/';
 
 //   const initialPayload = {
 //     ID: "",
@@ -42,12 +41,11 @@
 //     CREATED_USER: "",
 //     UPDATED_DATE: "",
 //     UPDATED_USER: "",
-//     STATUS: "ACTIVE",
+//     STATUS: "Active",
 //   };
 
 //   const [payload, setPayload] = useState(initialPayload);
 
-//   // Fetch data function
 //   const getData = async () => {
 //     setLoading(true);
 //     try {
@@ -66,10 +64,9 @@
 //     }
 //   };
 
-//   // Form submission handler
 //   const handleSubmit = async () => {
 //     try {
-//       const result = await submitData( VITE_SIA_PACKAGE_RATES_URL, payload);
+//       await submitData( VITE_SIA_PACKAGE_RATES_URL, payload);
 //       toast.success("Package rate added successfully!");
 //       getData();
 //       closeModal();
@@ -79,36 +76,26 @@
 //     }
 //   };
 
-//   // Update handler
+//   const handleAddData = () => {
+//     setPayload(initialPayload);
+//     openModal("addProduct");
+//   };
+
 //   const handleUpdate = async (id) => {
-//     try {
-//       const selectedData = response.find((item) => item.ID === id);
-//       if (selectedData) {
-//         setPayload({
-//           ID: selectedData.ID,
-//           TARRIF_ID: selectedData.TARRIF_ID,
-//           PACKAGE: selectedData.PACKAGE,
-//           COMPILANCE: selectedData.COMPILANCE,
-//           STAGE_LEVEL_STATUS_CHECK: selectedData.STAGE_LEVEL_STATUS_CHECK,
-//           SLAB_LEVEL_1_RATE: selectedData.SLAB_LEVEL_1_RATE,
-//           BASE_RATE: selectedData.BASE_RATE,
-//           CREATED_DATE: selectedData.CREATED_DATE,
-//           CREATED_USER: selectedData.CREATED_USER,
-//           UPDATED_DATE: selectedData.UPDATED_DATE,
-//           UPDATED_USER: selectedData.UPDATED_USER,
-//           STATUS: selectedData.STATUS,
-//         });
-//         openModal("updateProduct");
-//       } else {
-//         toast.error("Data not found");
-//       }
-//     } catch (error) {
-//       console.error("Update error:", error);
-//       toast.error("Failed to fetch data for update");
+//     const selectedData = response.find((item) => item.ID === id);
+//     if (selectedData) {
+//       setPayload({
+//         ...selectedData,
+//         // Ensure dates are in correct format for input fields
+//         CREATED_DATE: selectedData.CREATED_DATE?.split('T')[0],
+//         UPDATED_DATE: selectedData.UPDATED_DATE?.split('T')[0]
+//       });
+//       openModal("updateProduct");
+//     } else {
+//       toast.error("Data not found for the selected ID.");
 //     }
 //   };
 
-//   // Update submission handler
 //   const handleUpdatedData = async () => {
 //     try {
 //       if (payload.ID) {
@@ -123,10 +110,9 @@
 //     }
 //   };
 
-//   // Inactivation handler
 //   const handleInactive = async (id) => {
 //     const selectedData = response.find((item) => item.ID === id);
-//     if (selectedData && selectedData.STATUS === "ACTIVE") {
+//     if (selectedData && selectedData.STATUS === "Active") {
 //       const result = await Swal.fire({
 //         title: "Are you sure?",
 //         text: "This cannot be reverted",
@@ -139,7 +125,7 @@
 
 //       if (result.isConfirmed) {
 //         try {
-//           const updatedPayload = { ...selectedData, STATUS: "INACTIVE" };
+//           const updatedPayload = { ...selectedData, STATUS: "Inactive" };
 //           await updateData( VITE_SIA_PACKAGE_RATES_URL, id, updatedPayload);
 //           toast.success("Package rate inactivated");
 //           getData();
@@ -151,7 +137,6 @@
 //     }
 //   };
 
-//   // Table configuration
 //   const columns = [
 //     "Tarrif ID",
 //     "Package",
@@ -162,24 +147,25 @@
 //     "Status",
 //   ];
 
-//   const data = response
-//     .filter((item) =>
-//       item.PACKAGE?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//       item.TARRIF_ID?.toString().includes(searchQuery)
+//   const filteredData = response
+//     .filter(
+//       (item) =>
+//         item?.PACKAGE?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+//         item?.TARRIF_ID?.toString().includes(searchQuery)
 //     )
-//     .sort((a, b) => a.ID - b.ID)
-//     .map((item) => ({
-//       id: item.ID,
-//       "Tarrif ID": item.TARRIF_ID,
-//       "Package": item.PACKAGE,
-//       "Compilance": item.COMPILANCE,
-//       "Stage Level Status Check": item.STAGE_LEVEL_STATUS_CHECK,
-//       "Slab Level 1 Rate": item.SLAB_LEVEL_1_RATE,
-//       "Base Rate": item.BASE_RATE,
-//       "Status": item.STATUS,
-//     }));
+//     .sort((a, b) => a.ID - b.ID);
 
-//   // Initial data fetch
+//   const data = filteredData.map((item) => ({
+//     id: item.ID,
+//     "Tarrif ID": item.TARRIF_ID,
+//     "Package": item.PACKAGE,
+//     "Compilance": item.COMPILANCE,
+//     "Stage Level Status Check": item.STAGE_LEVEL_STATUS_CHECK,
+//     "Slab Level 1 Rate": item.SLAB_LEVEL_1_RATE,
+//     "Base Rate": item.BASE_RATE,
+//     "Status": item.STATUS,
+//   }));
+
 //   useEffect(() => {
 //     getData();
 //   }, [statusFilter]);
@@ -189,15 +175,12 @@
 //       <ToastContainer position="top-center" theme="colored" />
 //       <PageHeader
 //         title="Package Rates"
-//         placeholder="Search by Package or Tarrif ID"
 //         searchQuery={searchQuery}
 //         setSearchQuery={setSearchQuery}
+//         placeholder="Search by Package or Tarrif ID"
 //       />
 
-//       <ToggleBtn
-//         statusFilter={statusFilter}
-//         setStatusFilter={setStatusFilter}
-//       />
+//       <ToggleBtn statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
 
 //       {loading ? (
 //         <div className="p-4 text-center">Loading data...</div>
@@ -207,75 +190,79 @@
 //           data={data}
 //           handleUpdate={handleUpdate}
 //           handleInactive={handleInactive}
-//           title="Package Rates List"
+//           title="Package Rates"
 //         />
 //       )}
 
 //       <div className="flex justify-end pr-2">
 //         <PrimaryBtn
-//           name="Add New Package"
+//           name="Add New Row"
 //           icon={<PlusCircle />}
-//           onClick={() => {
-//             setPayload(initialPayload);
-//             openModal("addProduct");
-//           }}
+//           onClick={handleAddData}
 //         />
 //       </div>
 
 //       {/* Add Modal */}
-//       <ModalPopup
-//         title="Add New Package Rate"
-//         sideImg={sideImg}
-//         modalName="addProduct"
-//       >
+//       <ModalPopup title="Package Rates" sideImg={sideImg} modalName="addProduct">
 //         <div className="grid w-full grid-cols-2 gap-5 px-10 ml-5">
 //           <Input
 //             name="Tarrif ID"
 //             type="text"
 //             value={payload.TARRIF_ID}
 //             onChange={(e) => setPayload({ ...payload, TARRIF_ID: e.target.value })}
+//             required
 //           />
 //           <Input
 //             name="Package"
 //             type="text"
 //             value={payload.PACKAGE}
 //             onChange={(e) => setPayload({ ...payload, PACKAGE: e.target.value })}
+//             required
 //           />
-//           <Input
+//           <Dropdown
 //             name="Compilance"
-//             type="text"
 //             value={payload.COMPILANCE}
+//             options={["P", "F"]}
 //             onChange={(e) => setPayload({ ...payload, COMPILANCE: e.target.value })}
+//             required
 //           />
 //           <Input
 //             name="Stage Level Status Check"
 //             type="text"
 //             value={payload.STAGE_LEVEL_STATUS_CHECK}
-//             onChange={(e) => setPayload({ ...payload, STAGE_LEVEL_STATUS_CHECK: e.target.value })}
+//             onChange={(e) =>
+//               setPayload({ ...payload, STAGE_LEVEL_STATUS_CHECK: e.target.value })
+//             }
 //           />
 //           <Input
 //             name="Slab Level 1 Rate"
 //             type="number"
 //             value={payload.SLAB_LEVEL_1_RATE}
-//             onChange={(e) => setPayload({ ...payload, SLAB_LEVEL_1_RATE: e.target.value })}
+//             onChange={(e) =>
+//               setPayload({ ...payload, SLAB_LEVEL_1_RATE: e.target.value })
+//             }
+//             step="0.01"
 //           />
 //           <Input
 //             name="Base Rate"
 //             type="number"
 //             value={payload.BASE_RATE}
 //             onChange={(e) => setPayload({ ...payload, BASE_RATE: e.target.value })}
+//             step="0.01"
 //           />
 //           <Input
 //             name="Created User"
 //             type="text"
 //             value={payload.CREATED_USER}
 //             onChange={(e) => setPayload({ ...payload, CREATED_USER: e.target.value })}
+//             required
 //           />
 //           <Input
 //             name="Created Date"
 //             type="date"
 //             value={payload.CREATED_DATE}
 //             onChange={(e) => setPayload({ ...payload, CREATED_DATE: e.target.value })}
+//             required
 //           />
 //         </div>
 //         <div className="flex justify-center w-full gap-10 mt-10">
@@ -296,7 +283,7 @@
 
 //       {/* Update Modal */}
 //       <ModalPopup
-//         title="Update Package Rate"
+//         title="Update Package Rates"
 //         sideImg={sideImg}
 //         modalName="updateProduct"
 //       >
@@ -306,6 +293,7 @@
 //             type="text"
 //             value={payload.TARRIF_ID}
 //             onChange={(e) => setPayload({ ...payload, TARRIF_ID: e.target.value })}
+//             disabled
 //           />
 //           <Input
 //             name="Package"
@@ -313,34 +301,40 @@
 //             value={payload.PACKAGE}
 //             onChange={(e) => setPayload({ ...payload, PACKAGE: e.target.value })}
 //           />
-//           <Input
+//           <Dropdown
 //             name="Compilance"
-//             type="text"
 //             value={payload.COMPILANCE}
+//             options={["P", "F"]}
 //             onChange={(e) => setPayload({ ...payload, COMPILANCE: e.target.value })}
 //           />
 //           <Input
 //             name="Stage Level Status Check"
 //             type="text"
 //             value={payload.STAGE_LEVEL_STATUS_CHECK}
-//             onChange={(e) => setPayload({ ...payload, STAGE_LEVEL_STATUS_CHECK: e.target.value })}
+//             onChange={(e) =>
+//               setPayload({ ...payload, STAGE_LEVEL_STATUS_CHECK: e.target.value })
+//             }
 //           />
 //           <Input
 //             name="Slab Level 1 Rate"
 //             type="number"
 //             value={payload.SLAB_LEVEL_1_RATE}
-//             onChange={(e) => setPayload({ ...payload, SLAB_LEVEL_1_RATE: e.target.value })}
+//             onChange={(e) =>
+//               setPayload({ ...payload, SLAB_LEVEL_1_RATE: e.target.value })
+//             }
+//             step="0.01"
 //           />
 //           <Input
 //             name="Base Rate"
 //             type="number"
 //             value={payload.BASE_RATE}
 //             onChange={(e) => setPayload({ ...payload, BASE_RATE: e.target.value })}
+//             step="0.01"
 //           />
 //           <Dropdown
 //             name="Status"
 //             value={payload.STATUS}
-//             status={["ACTIVE", "INACTIVE"]}
+//             options={["Active", "Inactive"]}
 //             onChange={(e) => setPayload({ ...payload, STATUS: e.target.value })}
 //           />
 //           <Input
@@ -348,12 +342,455 @@
 //             type="text"
 //             value={payload.UPDATED_USER}
 //             onChange={(e) => setPayload({ ...payload, UPDATED_USER: e.target.value })}
+//             required
 //           />
 //           <Input
 //             name="Updated Date"
 //             type="date"
 //             value={payload.UPDATED_DATE}
 //             onChange={(e) => setPayload({ ...payload, UPDATED_DATE: e.target.value })}
+//             required
+//           />
+//         </div>
+//         <div className="flex justify-center w-full gap-10 mt-10">
+//           <button
+//             className="w-32 p-2 text-white rounded-md bg-primary"
+//             onClick={handleUpdatedData}
+//           >
+//             Update
+//           </button>
+//           <button
+//             className="w-32 p-2 text-white rounded-md bg-warning"
+//             onClick={closeModal}
+//           >
+//             Cancel
+//           </button>
+//         </div>
+//       </ModalPopup>
+//     </div>
+//   );
+// }
+
+// export default PackageRates;
+
+// import React, { useEffect, useState } from "react";
+// import PageHeader from "../../components/common/PageHeader";
+// import ActionTable from "../../components/common/ActionTable";
+// import { useModal } from "../../context/ModalContext";
+// import PrimaryBtn from "../../components/common/PrimaryBtn";
+// import ModalPopup from "../../components/common/ModalPopup";
+// import sideImg from "../../assets/images/userSideImg.png";
+// import { PlusCircle } from "lucide-react";
+// import {
+//   fetchData,
+//   fetchInactiveData,
+//   submitData,
+//   updateData,
+// } from "../../services/fetchData";
+// import Input from "../../components/common/Input";
+// import { toast, ToastContainer } from "react-toastify";
+// import Dropdown from "../../components/common/Dropdown";
+// import Swal from "sweetalert2";
+// import ToggleBtn from "../../components/common/ToggleBtn";
+// import { validations } from "../../utils/FormValidations";
+
+// function PackageRates() {
+//   const { openModal, closeModal } = useModal();
+//   const [response, setResponse] = useState([]);
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [statusFilter, setStatusFilter] = useState("Active");
+
+//   // API URL
+//   const VITE_SIA_PACKAGE_RATES_URL = 'http://127.0.0.1:8000/api/package-rates/';
+
+//   // Initial payload state
+//   const initialPayload = {
+//     ID: "",
+//     PACKAGE_RATE_ID: "",
+//     TARRIF_ID: "",
+//     PACKAGE: "",
+//     COMPLIANCE: "",
+//     STAGE_LEVEL_STATUS_CHECK: "",
+//     SLAB_LEVEL_1_RATE: "",
+//     BASE_RATE: "",
+//     CREATED_DATE: "",
+//     CREATED_USER: "",
+//     UPDATED_DATE: "",
+//     UPDATED_USER: "",
+//     STATUS: "Active",
+//   };
+
+//   const [payload, setPayload] = useState(initialPayload);
+//   const ruleName = "packageRates";
+
+//   // Handle form submission
+//   const handleSubmit = async () => {
+//     const errors = validations(payload, ruleName, false, response);
+
+//     if (errors.length > 0) {
+//       errors.forEach((err) => toast.warning(err));
+//       return;
+//     }
+
+//     try {
+//       const response = await submitData(VITE_SIA_PACKAGE_RATES_URL, payload);
+//       toast.success("Data submitted successfully!");
+//       getData();
+//       closeModal();
+//     } catch (error) {
+//       toast.error("Error submitting data");
+//       console.error("Error submitting data:", error);
+//     }
+//   };
+
+//   const handleAddData = () => {
+//     setPayload(initialPayload);
+//     openModal("addPackage");
+//   };
+
+//   useEffect(() => {
+//     getData();
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [statusFilter]);
+
+//   const getData = async () => {
+//     try {
+//       let data = [];
+//       if (statusFilter === "Active") {
+//         data = await fetchData(VITE_SIA_PACKAGE_RATES_URL);
+//       } else {
+//         data = await fetchInactiveData(VITE_SIA_PACKAGE_RATES_URL);
+//       }
+//       setResponse(data);
+//     } catch (error) {
+//       toast.error("Failed to fetch data");
+//       console.error("Error fetching data:", error);
+//     }
+//   };
+
+//   const columns = [
+//     "Package Rate ID",
+//     "Tariff ID",
+//     "Package",
+//     "Compliance",
+//     "Stage Level Status Check",
+//     "Slab Level 1 Rate",
+//     "Base Rate",
+//     "Status",
+//   ];
+
+//   const data = response
+//     .filter(
+//       (item) =>
+//         item?.PACKAGE?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+//         item?.TARRIF_ID?.toString().includes(searchQuery) ||
+//         item?.PACKAGE_RATE_ID?.toString().includes(searchQuery)
+//     )
+//     .sort((a, b) => a.ID - b.ID)
+//     .map((item) => ({
+//       id: item.ID,
+//       "Package Rate ID": item.PACKAGE_RATE_ID,
+//       "Tariff ID": item.TARRIF_ID,
+//       "Package": item.PACKAGE,
+//       "Compliance": item.COMPLIANCE,
+//       "Stage Level Status Check": item.STAGE_LEVEL_STATUS_CHECK,
+//       "Slab Level 1 Rate": item.SLAB_LEVEL_1_RATE,
+//       "Base Rate": item.BASE_RATE,
+//       "Status": item.STATUS,
+//     }));
+
+//   // Handle update
+//   const handleUpdate = async (id) => {
+//     toast.info(`Fetching data for update...`);
+//     const selectedData = response.find((item) => item.ID === id);
+    
+//     if (selectedData) {
+//       setPayload({
+//         ID: selectedData.ID,
+//         PACKAGE_RATE_ID: selectedData.PACKAGE_RATE_ID,
+//         TARRIF_ID: selectedData.TARRIF_ID,
+//         PACKAGE: selectedData.PACKAGE,
+//         COMPLIANCE: selectedData.COMPLIANCE,
+//         STAGE_LEVEL_STATUS_CHECK: selectedData.STAGE_LEVEL_STATUS_CHECK,
+//         SLAB_LEVEL_1_RATE: selectedData.SLAB_LEVEL_1_RATE,
+//         BASE_RATE: selectedData.BASE_RATE,
+//         UPDATED_USER: selectedData.UPDATED_USER,
+//         STATUS: selectedData.STATUS,
+//       });
+//       openModal("updatePackage");
+//     } else {
+//       toast.error("Data not found for the selected ID.");
+//     }
+//   };
+
+//   // Handle updated data submission
+//   const handleUpdatedData = async () => {
+//     const errors = validations(payload, ruleName, true);
+
+//     if (errors.length > 0) {
+//       errors.forEach((err) => toast.warning(err));
+//       return;
+//     }
+
+//     try {
+//       if (payload.ID) {
+//         const updatedData = await updateData(
+//           VITE_SIA_PACKAGE_RATES_URL,
+//           payload.ID,
+//           payload
+//         );
+//         toast.success("Data updated successfully!", updatedData);
+//         getData();
+//         closeModal();
+//       }
+//     } catch (error) {
+//       toast.error("Error updating data");
+//       console.error("Error updating data:", error);
+//     }
+//   };
+
+//   // Handle inactivation
+//   const handleInactive = async (id) => {
+//     const selectedData = response.find((item) => item.ID === id);
+//     if (selectedData && selectedData.STATUS === "Active") {
+//       const result = await Swal.fire({
+//         title: "Are you sure?",
+//         text: "This cannot be revert",
+//         icon: "warning",
+//         showCancelButton: true,
+//         confirmButtonColor: "#34a853",
+//         cancelButtonColor: "#d33",
+//         confirmButtonText: "Yes, inactivate it!",
+//       });
+
+//       if (result.isConfirmed) {
+//         try {
+//           const updatedPayload = { ...selectedData, STATUS: "Inactive" };
+//           await updateData(VITE_SIA_PACKAGE_RATES_URL, id, updatedPayload);
+//           toast.success("Package Rate Inactivated");
+//           getData();
+//         } catch (error) {
+//           toast.error("Failed to Inactivate");
+//           console.error("Inactivation error:", error);
+//         }
+//       } else {
+//         toast.info("Inactivation cancelled");
+//       }
+//     }
+//   };
+
+//   return (
+//     <div className="block">
+//       <ToastContainer position="top-right" theme="colored" />
+//       <PageHeader
+//         title="Package Rates"
+//         placeholder="Search by Package, Tariff ID or Package Rate ID"
+//         searchQuery={searchQuery}
+//         setSearchQuery={setSearchQuery}
+//       />
+
+//       <ToggleBtn
+//         statusFilter={statusFilter}
+//         setStatusFilter={setStatusFilter}
+//       />
+
+//       <ActionTable
+//         columns={columns}
+//         data={data}
+//         title={"Package Rates Report"}
+//         handleUpdate={handleUpdate}
+//         handleInactive={handleInactive}
+//       />
+
+//       <div className="flex justify-end pr-2">
+//         <PrimaryBtn
+//           name="Add New Package Rate"
+//           icon={<PlusCircle />}
+//           onClick={handleAddData}
+//         />
+//       </div>
+
+//       {/* Add Package Modal */}
+//       <ModalPopup
+//         title="Add Package Rate"
+//         sideImg={sideImg}
+//         modalName="addPackage"
+//       >
+//         <div className="grid w-full grid-cols-2 gap-5 px-10">
+//           <Input
+//             name="Package Rate ID"
+//             type="text"
+//             value={payload.PACKAGE_RATE_ID}
+//             onChange={(e) =>
+//               setPayload({ ...payload, PACKAGE_RATE_ID: e.target.value })
+//             }
+//             required
+//           />
+//           <Input
+//             name="Tariff ID"
+//             type="text"
+//             value={payload.TARRIF_ID}
+//             onChange={(e) =>
+//               setPayload({ ...payload, TARRIF_ID: e.target.value })
+//             }
+//             required
+//           />
+//           <Input
+//             name="Package"
+//             type="text"
+//             value={payload.PACKAGE}
+//             onChange={(e) =>
+//               setPayload({ ...payload, PACKAGE: e.target.value })
+//             }
+//             required
+//           />
+//           <Dropdown
+//             name="Compliance"
+//             value={payload.COMPLIANCE}
+//             options={["PASS", "FAIL"]}
+//             onChange={(e) =>
+//               setPayload({ ...payload, COMPLIANCE: e.target.value })
+//             }
+//             required
+//           />
+//           <Dropdown
+//             name="Stage Level Status Check"
+//             value={payload.STAGE_LEVEL_STATUS_CHECK}
+//             options={["YES", "NO"]}
+//             onChange={(e) =>
+//               setPayload({ ...payload, STAGE_LEVEL_STATUS_CHECK: e.target.value })
+//             }
+//           />
+//           <Input
+//             name="Slab Level 1 Rate"
+//             type="number"
+//             value={payload.SLAB_LEVEL_1_RATE}
+//             onChange={(e) =>
+//               setPayload({ ...payload, SLAB_LEVEL_1_RATE: e.target.value })
+//             }
+//             step="0.01"
+//           />
+//           <Input
+//             name="Base Rate"
+//             type="number"
+//             value={payload.BASE_RATE}
+//             onChange={(e) =>
+//               setPayload({ ...payload, BASE_RATE: e.target.value })
+//             }
+//             step="0.01"
+//           />
+//           <Input
+//             name="Created User"
+//             type="text"
+//             value={payload.CREATED_USER}
+//             onChange={(e) =>
+//               setPayload({ ...payload, CREATED_USER: e.target.value })
+//             }
+//             required
+//           />
+//         </div>
+//         <div className="flex justify-center w-full gap-10 mt-10">
+//           <button
+//             className="w-32 p-2 text-white rounded-md bg-success"
+//             onClick={handleSubmit}
+//           >
+//             Submit
+//           </button>
+//           <button
+//             className="w-32 p-2 text-white rounded-md bg-warning"
+//             onClick={closeModal}
+//           >
+//             Cancel
+//           </button>
+//         </div>
+//       </ModalPopup>
+
+//       {/* Update Package Modal */}
+//       <ModalPopup
+//         title="Update Package Rate"
+//         sideImg={sideImg}
+//         modalName="updatePackage"
+//       >
+//         <div className="grid w-full grid-cols-2 gap-5 px-10">
+//           <Input
+//             name="Package Rate ID"
+//             type="text"
+//             value={payload.PACKAGE_RATE_ID}
+//             onChange={(e) =>
+//               setPayload({ ...payload, PACKAGE_RATE_ID: e.target.value })
+//             }
+//             disabled
+//           />
+//           <Input
+//             name="Tariff ID"
+//             type="text"
+//             value={payload.TARRIF_ID}
+//             onChange={(e) =>
+//               setPayload({ ...payload, TARRIF_ID: e.target.value })
+//             }
+//             disabled
+//           />
+//           <Input
+//             name="Package"
+//             type="text"
+//             value={payload.PACKAGE}
+//             onChange={(e) =>
+//               setPayload({ ...payload, PACKAGE: e.target.value })
+//             }
+//           />
+//           <Dropdown
+//             name="Compliance"
+//             value={payload.COMPLIANCE}
+//             options={["PASS", "FAIL"]}
+//             onChange={(e) =>
+//               setPayload({ ...payload, COMPLIANCE: e.target.value })
+//             }
+//           />
+//           <Dropdown
+//             name="Stage Level Status Check"
+//             value={payload.STAGE_LEVEL_STATUS_CHECK}
+//             options={["YES", "NO"]}
+//             onChange={(e) =>
+//               setPayload({ ...payload, STAGE_LEVEL_STATUS_CHECK: e.target.value })
+//             }
+//           />
+//           <Input
+//             name="Slab Level 1 Rate"
+//             type="number"
+//             value={payload.SLAB_LEVEL_1_RATE}
+//             onChange={(e) =>
+//               setPayload({ ...payload, SLAB_LEVEL_1_RATE: e.target.value })
+//             }
+//             step="0.01"
+//           />
+//           <Input
+//             name="Base Rate"
+//             type="number"
+//             value={payload.BASE_RATE}
+//             onChange={(e) =>
+//               setPayload({ ...payload, BASE_RATE: e.target.value })
+//             }
+//             step="0.01"
+//           />
+//           <Input
+//             name="Updated User"
+//             type="text"
+//             value={payload.UPDATED_USER}
+//             onChange={(e) =>
+//               setPayload({ ...payload, UPDATED_USER: e.target.value })
+//             }
+//             required
+//           />
+//           <Dropdown
+//             name="Status"
+//             value={payload.STATUS}
+//             options={["Active", "Inactive"]}
+//             onChange={(e) =>
+//               setPayload({
+//                 ...payload,
+//                 STATUS: e.target.value,
+//               })
+//             }
 //           />
 //         </div>
 //         <div className="flex justify-center w-full gap-10 mt-10">
@@ -380,9 +817,10 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../../components/common/PageHeader";
 import ActionTable from "../../components/common/ActionTable";
+import { useModal } from "../../context/ModalContext";
 import PrimaryBtn from "../../components/common/PrimaryBtn";
 import ModalPopup from "../../components/common/ModalPopup";
-import { useModal } from "../../context/ModalContext";
+import sideImg from "../../assets/images/userSideImg.png";
 import { PlusCircle } from "lucide-react";
 import {
   fetchData,
@@ -390,27 +828,34 @@ import {
   submitData,
   updateData,
 } from "../../services/fetchData";
-import sideImg from "../../assets/images/userSideImg.png";
 import Input from "../../components/common/Input";
+import { toast, ToastContainer } from "react-toastify";
 import Dropdown from "../../components/common/Dropdown";
-import { ToastContainer, toast } from "react-toastify";
 import Swal from "sweetalert2";
 import ToggleBtn from "../../components/common/ToggleBtn";
+import { validations } from "../../utils/FormValidations";
 
 function PackageRates() {
   const { openModal, closeModal } = useModal();
   const [response, setResponse] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("Active");
-  const [loading, setLoading] = useState(false);
 
-  const  VITE_SIA_PACKAGE_RATES_URL = 'http://127.0.0.1:8000/api/package-rates/';
+  // API URL
+  const VITE_SIA_PACKAGE_RATES_URL = 'http://127.0.0.1:8000/api/package-rates/';
 
+  // Define dropdown options
+  const complianceOptions = ["PASS", "FAIL"];
+  const statusCheckOptions = ["YES", "NO"];
+  const statusOptions = ["Active", "Inactive"];
+
+  // Initial payload state
   const initialPayload = {
     ID: "",
+    PACKAGE_RATE_ID: "",
     TARRIF_ID: "",
     PACKAGE: "",
-    COMPILANCE: "",
+    COMPLIANCE: "",
     STAGE_LEVEL_STATUS_CHECK: "",
     SLAB_LEVEL_1_RATE: "",
     BASE_RATE: "",
@@ -422,77 +867,141 @@ function PackageRates() {
   };
 
   const [payload, setPayload] = useState(initialPayload);
+  const ruleName = "packageRates";
 
-  const getData = async () => {
-    setLoading(true);
-    try {
-      let data = [];
-      if (statusFilter === "Active") {
-        data = await fetchData( VITE_SIA_PACKAGE_RATES_URL);
-      } else {
-        data = await fetchInactiveData( VITE_SIA_PACKAGE_RATES_URL);
-      }
-      setResponse(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      toast.error("Failed to fetch data");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Handle form submission
   const handleSubmit = async () => {
+    const errors = validations(payload, ruleName, false, response);
+
+    if (errors.length > 0) {
+      errors.forEach((err) => toast.warning(err));
+      return;
+    }
+
     try {
-      await submitData( VITE_SIA_PACKAGE_RATES_URL, payload);
-      toast.success("Package rate added successfully!");
+      const response = await submitData(VITE_SIA_PACKAGE_RATES_URL, payload);
+      toast.success("Data submitted successfully!");
       getData();
       closeModal();
     } catch (error) {
-      console.error("Submission error:", error);
-      toast.error("Failed to add package rate");
+      toast.error("Error submitting data");
+      console.error("Error submitting data:", error);
     }
   };
 
   const handleAddData = () => {
     setPayload(initialPayload);
-    openModal("addProduct");
+    openModal("addPackage");
   };
 
+  useEffect(() => {
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusFilter]);
+
+  const getData = async () => {
+    try {
+      let data = [];
+      if (statusFilter === "Active") {
+        data = await fetchData(VITE_SIA_PACKAGE_RATES_URL);
+      } else {
+        data = await fetchInactiveData(VITE_SIA_PACKAGE_RATES_URL);
+      }
+      setResponse(data);
+    } catch (error) {
+      toast.error("Failed to fetch data");
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const columns = [
+    "Package Rate ID",
+    "Tariff ID",
+    "Package",
+    "Compliance",
+    "Stage Level Status Check",
+    "Slab Level 1 Rate",
+    "Base Rate",
+    "Status",
+  ];
+
+  const data = response
+    .filter(
+      (item) =>
+        item?.PACKAGE?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item?.TARRIF_ID?.toString().includes(searchQuery) ||
+        item?.PACKAGE_RATE_ID?.toString().includes(searchQuery)
+    )
+    .sort((a, b) => a.ID - b.ID)
+    .map((item) => ({
+      id: item.ID,
+      "Package Rate ID": item.PACKAGE_RATE_ID,
+      "Tariff ID": item.TARRIF_ID,
+      "Package": item.PACKAGE,
+      "Compliance": item.COMPLIANCE,
+      "Stage Level Status Check": item.STAGE_LEVEL_STATUS_CHECK,
+      "Slab Level 1 Rate": item.SLAB_LEVEL_1_RATE,
+      "Base Rate": item.BASE_RATE,
+      "Status": item.STATUS,
+    }));
+
+  // Handle update
   const handleUpdate = async (id) => {
+    toast.info(`Fetching data for update...`);
     const selectedData = response.find((item) => item.ID === id);
+    
     if (selectedData) {
       setPayload({
-        ...selectedData,
-        // Ensure dates are in correct format for input fields
-        CREATED_DATE: selectedData.CREATED_DATE?.split('T')[0],
-        UPDATED_DATE: selectedData.UPDATED_DATE?.split('T')[0]
+        ID: selectedData.ID,
+        PACKAGE_RATE_ID: selectedData.PACKAGE_RATE_ID,
+        TARRIF_ID: selectedData.TARRIF_ID,
+        PACKAGE: selectedData.PACKAGE,
+        COMPLIANCE: selectedData.COMPLIANCE,
+        STAGE_LEVEL_STATUS_CHECK: selectedData.STAGE_LEVEL_STATUS_CHECK,
+        SLAB_LEVEL_1_RATE: selectedData.SLAB_LEVEL_1_RATE,
+        BASE_RATE: selectedData.BASE_RATE,
+        UPDATED_USER: selectedData.UPDATED_USER,
+        STATUS: selectedData.STATUS,
       });
-      openModal("updateProduct");
+      openModal("updatePackage");
     } else {
       toast.error("Data not found for the selected ID.");
     }
   };
 
+  // Handle updated data submission
   const handleUpdatedData = async () => {
+    const errors = validations(payload, ruleName, true);
+
+    if (errors.length > 0) {
+      errors.forEach((err) => toast.warning(err));
+      return;
+    }
+
     try {
       if (payload.ID) {
-        await updateData( VITE_SIA_PACKAGE_RATES_URL, payload.ID, payload);
-        toast.success("Package rate updated successfully!");
+        const updatedData = await updateData(
+          VITE_SIA_PACKAGE_RATES_URL,
+          payload.ID,
+          payload
+        );
+        toast.success("Data updated successfully!", updatedData);
         getData();
         closeModal();
       }
     } catch (error) {
-      console.error("Update error:", error);
-      toast.error("Failed to update package rate");
+      toast.error("Error updating data");
+      console.error("Error updating data:", error);
     }
   };
 
+  // Handle inactivation
   const handleInactive = async (id) => {
     const selectedData = response.find((item) => item.ID === id);
     if (selectedData && selectedData.STATUS === "Active") {
       const result = await Swal.fire({
         title: "Are you sure?",
-        text: "This cannot be reverted",
+        text: "This cannot be revert",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#34a853",
@@ -503,110 +1012,97 @@ function PackageRates() {
       if (result.isConfirmed) {
         try {
           const updatedPayload = { ...selectedData, STATUS: "Inactive" };
-          await updateData( VITE_SIA_PACKAGE_RATES_URL, id, updatedPayload);
-          toast.success("Package rate inactivated");
+          await updateData(VITE_SIA_PACKAGE_RATES_URL, id, updatedPayload);
+          toast.success("Package Rate Inactivated");
           getData();
         } catch (error) {
+          toast.error("Failed to Inactivate");
           console.error("Inactivation error:", error);
-          toast.error("Failed to inactivate");
         }
+      } else {
+        toast.info("Inactivation cancelled");
       }
     }
   };
 
-  const columns = [
-    "Tarrif ID",
-    "Package",
-    "Compilance",
-    "Stage Level Status Check",
-    "Slab Level 1 Rate",
-    "Base Rate",
-    "Status",
-  ];
-
-  const filteredData = response
-    .filter(
-      (item) =>
-        item?.PACKAGE?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item?.TARRIF_ID?.toString().includes(searchQuery)
-    )
-    .sort((a, b) => a.ID - b.ID);
-
-  const data = filteredData.map((item) => ({
-    id: item.ID,
-    "Tarrif ID": item.TARRIF_ID,
-    "Package": item.PACKAGE,
-    "Compilance": item.COMPILANCE,
-    "Stage Level Status Check": item.STAGE_LEVEL_STATUS_CHECK,
-    "Slab Level 1 Rate": item.SLAB_LEVEL_1_RATE,
-    "Base Rate": item.BASE_RATE,
-    "Status": item.STATUS,
-  }));
-
-  useEffect(() => {
-    getData();
-  }, [statusFilter]);
-
   return (
     <div className="block">
-      <ToastContainer position="top-center" theme="colored" />
+      <ToastContainer position="top-right" theme="colored" />
       <PageHeader
         title="Package Rates"
+        placeholder="Search by Package, Tariff ID or Package Rate ID"
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        placeholder="Search by Package or Tarrif ID"
       />
 
-      <ToggleBtn statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
+      <ToggleBtn
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+      />
 
-      {loading ? (
-        <div className="p-4 text-center">Loading data...</div>
-      ) : (
-        <ActionTable
-          columns={columns}
-          data={data}
-          handleUpdate={handleUpdate}
-          handleInactive={handleInactive}
-          title="Package Rates"
-        />
-      )}
+      <ActionTable
+        columns={columns}
+        data={data}
+        title={"Package Rates Report"}
+        handleUpdate={handleUpdate}
+        handleInactive={handleInactive}
+      />
 
       <div className="flex justify-end pr-2">
         <PrimaryBtn
-          name="Add New Row"
+          name="Add New Package Rate"
           icon={<PlusCircle />}
           onClick={handleAddData}
         />
       </div>
 
-      {/* Add Modal */}
-      <ModalPopup title="Package Rates" sideImg={sideImg} modalName="addProduct">
-        <div className="grid w-full grid-cols-2 gap-5 px-10 ml-5">
+      {/* Add Package Modal */}
+      <ModalPopup
+        title="Add Package Rate"
+        sideImg={sideImg}
+        modalName="addPackage"
+      >
+        <div className="grid w-full grid-cols-2 gap-5 px-10">
           <Input
-            name="Tarrif ID"
+            name="Package Rate ID"
+            type="text"
+            value={payload.PACKAGE_RATE_ID}
+            onChange={(e) =>
+              setPayload({ ...payload, PACKAGE_RATE_ID: e.target.value })
+            }
+            required
+          />
+          <Input
+            name="Tariff ID"
             type="text"
             value={payload.TARRIF_ID}
-            onChange={(e) => setPayload({ ...payload, TARRIF_ID: e.target.value })}
+            onChange={(e) =>
+              setPayload({ ...payload, TARRIF_ID: e.target.value })
+            }
             required
           />
           <Input
             name="Package"
             type="text"
             value={payload.PACKAGE}
-            onChange={(e) => setPayload({ ...payload, PACKAGE: e.target.value })}
+            onChange={(e) =>
+              setPayload({ ...payload, PACKAGE: e.target.value })
+            }
             required
           />
           <Dropdown
-            name="Compilance"
-            value={payload.COMPILANCE}
-            options={["P", "F"]}
-            onChange={(e) => setPayload({ ...payload, COMPILANCE: e.target.value })}
+            name="Compliance"
+            value={payload.COMPLIANCE}
+            options={complianceOptions}
+            onChange={(e) =>
+              setPayload({ ...payload, COMPLIANCE: e.target.value })
+            }
             required
           />
-          <Input
+          <Dropdown
             name="Stage Level Status Check"
-            type="text"
             value={payload.STAGE_LEVEL_STATUS_CHECK}
+            options={statusCheckOptions}
             onChange={(e) =>
               setPayload({ ...payload, STAGE_LEVEL_STATUS_CHECK: e.target.value })
             }
@@ -624,21 +1120,18 @@ function PackageRates() {
             name="Base Rate"
             type="number"
             value={payload.BASE_RATE}
-            onChange={(e) => setPayload({ ...payload, BASE_RATE: e.target.value })}
+            onChange={(e) =>
+              setPayload({ ...payload, BASE_RATE: e.target.value })
+            }
             step="0.01"
           />
           <Input
             name="Created User"
             type="text"
             value={payload.CREATED_USER}
-            onChange={(e) => setPayload({ ...payload, CREATED_USER: e.target.value })}
-            required
-          />
-          <Input
-            name="Created Date"
-            type="date"
-            value={payload.CREATED_DATE}
-            onChange={(e) => setPayload({ ...payload, CREATED_DATE: e.target.value })}
+            onChange={(e) =>
+              setPayload({ ...payload, CREATED_USER: e.target.value })
+            }
             required
           />
         </div>
@@ -658,36 +1151,51 @@ function PackageRates() {
         </div>
       </ModalPopup>
 
-      {/* Update Modal */}
+      {/* Update Package Modal */}
       <ModalPopup
-        title="Update Package Rates"
+        title="Update Package Rate"
         sideImg={sideImg}
-        modalName="updateProduct"
+        modalName="updatePackage"
       >
-        <div className="grid w-full grid-cols-2 gap-5 px-10 ml-5">
+        <div className="grid w-full grid-cols-2 gap-5 px-10">
           <Input
-            name="Tarrif ID"
+            name="Package Rate ID"
+            type="text"
+            value={payload.PACKAGE_RATE_ID}
+            onChange={(e) =>
+              setPayload({ ...payload, PACKAGE_RATE_ID: e.target.value })
+            }
+            disabled
+          />
+          <Input
+            name="Tariff ID"
             type="text"
             value={payload.TARRIF_ID}
-            onChange={(e) => setPayload({ ...payload, TARRIF_ID: e.target.value })}
+            onChange={(e) =>
+              setPayload({ ...payload, TARRIF_ID: e.target.value })
+            }
             disabled
           />
           <Input
             name="Package"
             type="text"
             value={payload.PACKAGE}
-            onChange={(e) => setPayload({ ...payload, PACKAGE: e.target.value })}
+            onChange={(e) =>
+              setPayload({ ...payload, PACKAGE: e.target.value })
+            }
           />
           <Dropdown
-            name="Compilance"
-            value={payload.COMPILANCE}
-            options={["P", "F"]}
-            onChange={(e) => setPayload({ ...payload, COMPILANCE: e.target.value })}
+            name="Compliance"
+            value={payload.COMPLIANCE}
+            options={complianceOptions}
+            onChange={(e) =>
+              setPayload({ ...payload, COMPLIANCE: e.target.value })
+            }
           />
-          <Input
+          <Dropdown
             name="Stage Level Status Check"
-            type="text"
             value={payload.STAGE_LEVEL_STATUS_CHECK}
+            options={statusCheckOptions}
             onChange={(e) =>
               setPayload({ ...payload, STAGE_LEVEL_STATUS_CHECK: e.target.value })
             }
@@ -705,28 +1213,30 @@ function PackageRates() {
             name="Base Rate"
             type="number"
             value={payload.BASE_RATE}
-            onChange={(e) => setPayload({ ...payload, BASE_RATE: e.target.value })}
+            onChange={(e) =>
+              setPayload({ ...payload, BASE_RATE: e.target.value })
+            }
             step="0.01"
-          />
-          <Dropdown
-            name="Status"
-            value={payload.STATUS}
-            options={["Active", "Inactive"]}
-            onChange={(e) => setPayload({ ...payload, STATUS: e.target.value })}
           />
           <Input
             name="Updated User"
             type="text"
             value={payload.UPDATED_USER}
-            onChange={(e) => setPayload({ ...payload, UPDATED_USER: e.target.value })}
+            onChange={(e) =>
+              setPayload({ ...payload, UPDATED_USER: e.target.value })
+            }
             required
           />
-          <Input
-            name="Updated Date"
-            type="date"
-            value={payload.UPDATED_DATE}
-            onChange={(e) => setPayload({ ...payload, UPDATED_DATE: e.target.value })}
-            required
+          <Dropdown
+            name="Status"
+            value={payload.STATUS}
+            options={statusOptions}
+            onChange={(e) =>
+              setPayload({
+                ...payload,
+                STATUS: e.target.value,
+              })
+            }
           />
         </div>
         <div className="flex justify-center w-full gap-10 mt-10">
