@@ -138,8 +138,8 @@ export const validations = (
 
     if (!safe(data.PACKAGE_NAME)) {
       errors.push("package name is required");
-    } else if (!digitsOnly.test(safe(data.PACKAGE_NAME))) {
-      errors.push("package name must be in numbers");
+    } else if (!alphanum.test(safe(data.PACKAGE_NAME))) {
+      errors.push("package name must be in letters");
     }
 
     if (isUpdate) {
@@ -218,22 +218,22 @@ export const validations = (
     // Duplicate check (only during creation)
     if (!isUpdate && existingEntries) {
       const duplicate = existingEntries.some(
-        (item) => item.EXP_ID === data.EXP_ID
+        (item) => item.BEARER_RATES_ID === data.BEARER_RATES_ID
       );
       if (duplicate) {
-        errors.push("This package with the same EXP ID already exists.");
+        errors.push("This package with the same Bearer rates ID already exists.");
       }
     }
 
     return errors;
   }
 
-  // bearer PCR validation
-  if (ruleName === "bearerPCR") {
-    if (!data.BEARER_PCR_ID?.trim()) {
-      errors.push("Bearer PCR ID is required");
-    } else if (!digitsOnly.test(data.BEARER_PCR_ID)) {
-      errors.push("Bearer PCR ID must contain digits only");
+  // package rates validations
+  if (ruleName === "packageRates") {
+    if (!data.PACKAGE_RATE_ID?.trim()) {
+      errors.push("Pakage rates ID is required");
+    } else if (!digitsOnly.test(data.PACKAGE_RATE_ID)) {
+      errors.push("Package rates ID must contain digits only");
     }
 
     if (!data.TARIFF_ID?.trim()) {
@@ -242,125 +242,36 @@ export const validations = (
       errors.push("Tariff ID must contain digits only");
     }
 
-    if (!data.TARIFF_NAME?.trim()) {
-      errors.push("Tariff Name is required");
-    } else if (!alphanum.test(data.TARIFF_NAME)) {
-      errors.push("Tariff Name must contain only letters and numbers");
+    if (!data.PACKAGE?.trim()) {
+      errors.push("package is required");
+    } else if (!alphanum.test(data.PACKAGE)) {
+      errors.push("package must contain only letters and numbers");
     }
 
-    if (!data.RENTAL_WO_TAX?.toString().trim()) {
-      errors.push("Rental Without Tax is required");
-    } else if (!floatNumber.test(data.RENTAL_WO_TAX)) {
-      errors.push("Rental Without Tax must be a valid number");
+    if (!data.COMPILANCE?.toString().trim()) {
+      errors.push("Compilance is required");
+    } else if (!alpha.test(data.COMPILANCE)) {
+      errors.push("compilance must contain only letters and spaces");
     }
 
-    if (!data.SERVICE_TYPE?.trim()) {
-      errors.push("Service Type is required");
-    } else if (!alpha.test(data.SERVICE_TYPE)) {
-      errors.push("Service Type must contain only letters");
+    if (!data.SLAB_LEVEL_1_RATE?.trim()) {
+      errors.push("Slab level 1 rate is required");
+    } else if (!alphanum.test(data.SLAB_LEVEL_1_RATE)) {
+      errors.push("slab level 1 must contain only letters and numbers");
     }
 
-    if (!data.ORDER_TYPE?.trim()) {
-      errors.push("Order Type is required");
-    } else if (!alpha.test(data.ORDER_TYPE)) {
-      errors.push("Order Type must contain only letters");
+    if (!data.STAGE_LEVEL_STATUS_CHECK?.trim()) {
+      errors.push("stage level status check is required");
+    } else if (!alpha.test(data.STAGE_LEVEL_STATUS_CHECK)) {
+      errors.push("stage level status check must contain only letters");
+    }
+if (!data.BASE_RATE?.trim()) {
+      errors.push("BASE RATE status check is required");
+    } else if (!alpha.test(data.BASE_RATE)) {
+      errors.push("BASE RATE status check must contain only letters");
     }
 
-    if (!data.ORDER_SUB_TYPE?.trim()) {
-      errors.push("Order Sub Type is required");
-    } else if (!alpha.test(data.ORDER_SUB_TYPE)) {
-      errors.push("Order Sub Type must contain only letters");
-    }
-
-    if (!data.SPEED?.trim()) {
-      errors.push("Speed is required");
-    } else if (!alphanum.test(data.SPEED)) {
-      errors.push("Speed must contain only letters and numbers");
-    }
-
-    if (!data.WITH_BB_RATE?.toString().trim()) {
-      errors.push("With BB Rate is required");
-    } else if (!floatNumber.test(data.WITH_BB_RATE)) {
-      errors.push("With BB Rate must be a valid number");
-    }
-
-    if (!data.WITHOUT_BB_RATE?.toString().trim()) {
-      errors.push("Without BB Rate is required");
-    } else if (!floatNumber.test(data.WITHOUT_BB_RATE)) {
-      errors.push("Without BB Rate must be a valid number");
-    }
-
-    if (isUpdate) {
-      if (!data.UPDATED_USER?.trim()) {
-        errors.push("Updated User is required");
-      } else if (!alpha.test(data.UPDATED_USER)) {
-        errors.push("Updated User must contain only letters");
-      }
-    } else {
-      if (!data.CREATED_USER?.trim()) {
-        errors.push("Created User is required");
-      } else if (!alpha.test(data.CREATED_USER)) {
-        errors.push("Created User must contain only letters");
-      }
-    }
-
-    // Optional: Duplicate check (on creation only)
-    if (!isUpdate && existingEntries) {
-      const duplicate = existingEntries.some(
-        (item) => item.BEARER_PCR_ID === data.BEARER_PCR_ID
-      );
-      if (duplicate) {
-        errors.push("A record with the same Bearer PCR ID already exists.");
-      }
-    }
-
-    return errors;
-  }
-
-  // peo packages validations
-  if (ruleName === "peoPackages") {
-    if (!data.PEO_PCR_ID?.trim()) {
-      errors.push("PEO PCR ID is required");
-    } else if (!digitsOnly.test(data.PEO_PCR_ID)) {
-      errors.push("PEO PCR ID must contain digits only");
-    }
-
-    if (!data.TARIFF_ID?.trim()) {
-      errors.push("Tariff ID is required");
-    } else if (!digitsOnly.test(data.TARIFF_ID)) {
-      errors.push("Tariff ID must contain digits only");
-    }
-
-    if (!data.TARIFF_NAME?.trim()) {
-      errors.push("Tariff Name is required");
-    } else if (!alphanum.test(data.TARIFF_NAME)) {
-      errors.push("Tariff Name must contain only letters and numbers");
-    }
-
-    if (!data.RENTAL_WO_TAX?.toString().trim()) {
-      errors.push("Rental Without Tax is required");
-    } else if (!floatNumber.test(data.RENTAL_WO_TAX)) {
-      errors.push("Rental Without Tax must be a valid number");
-    }
-
-    if (!data.SERVICE_TYPE?.trim()) {
-      errors.push("Service Type is required");
-    } else if (!alpha.test(data.SERVICE_TYPE)) {
-      errors.push("Service Type must contain only letters");
-    }
-
-    if (!data.ORDER_TYPE?.trim()) {
-      errors.push("Order Type is required");
-    } else if (!alpha.test(data.ORDER_TYPE)) {
-      errors.push("Order Type must contain only letters");
-    }
-
-    if (!data.PCR?.toString().trim()) {
-      errors.push("PCR is required");
-    } else if (!floatNumber.test(data.PCR)) {
-      errors.push("PCR must be a valid number");
-    }
-
+  
     if (isUpdate) {
       if (!data.UPDATED_USER?.trim()) {
         errors.push("Updated User is required");
@@ -378,11 +289,11 @@ export const validations = (
     // Optional duplicate check
     if (!isUpdate && existingEntries) {
       const duplicate = existingEntries.some(
-        (item) => item.PEO_PCR_ID === data.PEO_PCR_ID
+        (item) => item.PACKAGE_RATE_ID === data.PACKAGE_RATE_ID
       );
       if (duplicate) {
         errors.push(
-          "A PEO PCR record with the same PEO PCR ID already exists."
+          "A Package rates record with the same Package rate ID already exists."
         );
       }
     }
@@ -390,295 +301,4 @@ export const validations = (
     return errors;
   }
 
-  // bb packages validations
-  if (ruleName === "BBPackages") {
-    if (!data.BB_PCR_ID?.trim()) {
-      errors.push("BB PCR ID is required");
-    } else if (!digitsOnly.test(data.BB_PCR_ID)) {
-      errors.push("BB PCR ID must contain digits only");
-    }
-
-    if (!data.TARIFF_ID?.trim()) {
-      errors.push("Tariff ID is required");
-    } else if (!digitsOnly.test(data.TARIFF_ID)) {
-      errors.push("Tariff ID must contain digits only");
-    }
-
-    if (!data.TARIFF_NAME?.trim()) {
-      errors.push("Tariff Name is required");
-    } else if (!alphanum.test(data.TARIFF_NAME)) {
-      errors.push("Tariff Name must contain only letters and numbers");
-    }
-
-    if (!data.RENTAL_WO_TAX?.toString().trim()) {
-      errors.push("Rental Without Tax is required");
-    } else if (!floatNumber.test(data.RENTAL_WO_TAX)) {
-      errors.push("Rental Without Tax must be a valid number");
-    }
-
-    if (!data.PCR?.toString().trim()) {
-      errors.push("PCR is required");
-    } else if (!floatNumber.test(data.PCR)) {
-      errors.push("PCR must be a valid number");
-    }
-
-    if (!data.ADDITIONAL_COST?.toString().trim()) {
-      errors.push("Additional Cost is required");
-    } else if (!floatNumber.test(data.ADDITIONAL_COST)) {
-      errors.push("Additional Cost must be a valid number");
-    }
-
-    if (!data.SERVICE_TYPE?.trim()) {
-      errors.push("Service Type is required");
-    } else if (!alpha.test(data.SERVICE_TYPE)) {
-      errors.push("Service Type must contain only letters");
-    }
-
-    if (!data.ORDER_TYPE?.trim()) {
-      errors.push("Order Type is required");
-    } else if (!alpha.test(data.ORDER_TYPE)) {
-      errors.push("Order Type must contain only letters");
-    }
-
-    if (isUpdate) {
-      if (!data.UPDATED_USER?.trim()) {
-        errors.push("Updated User is required");
-      } else if (!alpha.test(data.UPDATED_USER)) {
-        errors.push("Updated User must contain only letters");
-      }
-    } else {
-      if (!data.CREATED_USER?.trim()) {
-        errors.push("Created User is required");
-      } else if (!alpha.test(data.CREATED_USER)) {
-        errors.push("Created User must contain only letters");
-      }
-    }
-
-    // Optional Duplicate Check
-    if (!isUpdate && existingEntries) {
-      const duplicate = existingEntries.some(
-        (item) => item.BB_PCR_ID === data.BB_PCR_ID
-      );
-      if (duplicate) {
-        errors.push("A BB Package with the same BB PCR ID already exists.");
-      }
-    }
-
-    return errors;
-  }
-
-  // LteBb Packages validations
-  if (ruleName === "LteBbPackages") {
-    if (!data.TARIFF_ID?.trim()) {
-      errors.push("Tariff ID is required");
-    } else if (!digitsOnly.test(data.TARIFF_ID)) {
-      errors.push("Tariff ID must contain digits only");
-    }
-
-    if (!data.TARIFF_NAME?.trim()) {
-      errors.push("Tariff Name is required");
-    } else if (!alphanum.test(data.TARIFF_NAME)) {
-      errors.push("Tariff Name must be alphanumeric only");
-    }
-
-    if (!data.SERVICE_TYPE?.trim()) {
-      errors.push("Service Type is required");
-    } else if (!alpha.test(data.SERVICE_TYPE)) {
-      errors.push("Service Type must contain only letters");
-    }
-
-    if (!data.ORDER_TYPE?.trim()) {
-      errors.push("Order Type is required");
-    } else if (!alpha.test(data.ORDER_TYPE)) {
-      errors.push("Order Type must contain only letters");
-    }
-
-    if (!data.RENTAL?.toString().trim()) {
-      errors.push("Rental is required");
-    } else if (!floatNumber.test(data.RENTAL)) {
-      errors.push("Rental must be a valid number");
-    }
-
-    if (!data.PCR?.toString().trim()) {
-      errors.push("PCR is required");
-    } else if (!floatNumber.test(data.PCR)) {
-      errors.push("PCR must be a valid number");
-    }
-
-    if (isUpdate) {
-      if (!data.UPDATED_USER?.trim()) {
-        errors.push("Updated User is required");
-      } else if (!alpha.test(data.UPDATED_USER)) {
-        errors.push("Updated User must contain only letters");
-      }
-    } else {
-      if (!data.CREATED_USER?.trim()) {
-        errors.push("Created User is required");
-      } else if (!alpha.test(data.CREATED_USER)) {
-        errors.push("Created User must contain only letters");
-      }
-    }
-
-    // Check for duplicate TARIFF_ID only during creation
-    if (!isUpdate && existingEntries) {
-      const duplicate = existingEntries.some(
-        (item) => item.TARIFF_ID === data.TARIFF_ID
-      );
-      if (duplicate) {
-        errors.push("A record with the same Tariff ID already exists.");
-      }
-    }
-
-    return errors;
-  }
-
-  // LteBb Package PCR validations
-  if (ruleName === "LteBbPackagePCR") {
-    if (!data.LTEBB_PCR_ID?.trim()) {
-      errors.push("LTE BB PCR ID is required");
-    } else if (!digitsOnly.test(data.LTEBB_PCR_ID)) {
-      errors.push("LTE BB PCR ID must contain digits only");
-    }
-
-    if (!data.TARIFF_ID?.trim()) {
-      errors.push("Tariff ID is required");
-    } else if (!digitsOnly.test(data.TARIFF_ID)) {
-      errors.push("Tariff ID must contain digits only");
-    }
-
-    if (!data.TARIFF_NAME?.trim()) {
-      errors.push("Tariff Name is required");
-    } else if (!alphanum.test(data.TARIFF_NAME)) {
-      errors.push("Tariff Name must be alphanumeric");
-    }
-
-    if (!data.SERVICE_TYPE?.trim()) {
-      errors.push("Service Type is required");
-    } else if (!alpha.test(data.SERVICE_TYPE)) {
-      errors.push("Service Type must contain letters only");
-    }
-
-    if (!data.ORDER_TYPE?.trim()) {
-      errors.push("Order Type is required");
-    } else if (!alpha.test(data.ORDER_TYPE)) {
-      errors.push("Order Type must contain letters only");
-    }
-
-    if (!data.PREPAID_RATE?.toString().trim()) {
-      errors.push("Prepaid Rate is required");
-    } else if (!floatNumber.test(data.PREPAID_RATE)) {
-      errors.push("Prepaid Rate must be a valid number");
-    }
-
-    if (!data.POSTPAID_FULL_PAYMENT_RATE?.toString().trim()) {
-      errors.push("Postpaid Full Payment Rate is required");
-    } else if (!floatNumber.test(data.POSTPAID_FULL_PAYMENT_RATE)) {
-      errors.push("Postpaid Full Payment Rate must be a valid number");
-    }
-
-    if (!data.POSTPAID_CONCESSIONARY?.toString().trim()) {
-      errors.push("Postpaid Concessionary Rate is required");
-    } else if (!floatNumber.test(data.POSTPAID_CONCESSIONARY)) {
-      errors.push("Postpaid Concessionary Rate must be a valid number");
-    }
-
-    if (!data.PAID_TYPE?.trim()) {
-      errors.push("Paid Type is required");
-    } else if (!alpha.test(data.PAID_TYPE)) {
-      errors.push("Paid Type must contain only letters");
-    }
-
-    if (isUpdate) {
-      if (!data.UPDATED_USER?.trim()) {
-        errors.push("Updated User is required");
-      } else if (!alpha.test(data.UPDATED_USER)) {
-        errors.push("Updated User must contain only letters");
-      }
-    } else {
-      if (!data.CREATED_USER?.trim()) {
-        errors.push("Created User is required");
-      } else if (!alpha.test(data.CREATED_USER)) {
-        errors.push("Created User must contain only letters");
-      }
-
-      // Duplicate check during creation
-      if (existingEntries) {
-        const duplicate = existingEntries.some(
-          (item) =>
-            item.LTEBB_PCR_ID === data.LTEBB_PCR_ID ||
-            item.TARIFF_ID === data.TARIFF_ID
-        );
-        if (duplicate) {
-          errors.push(
-            "A record with the same LTE BB PCR ID or Tariff ID already exists"
-          );
-        }
-      }
-    }
-
-    return errors;
-  }
-
-  // unlimited voice packages validations
-  if (ruleName === "unlimitedVoice") {
-    if (!data.UVOICE_ID?.trim()) {
-      errors.push("UVOICE ID is required");
-    } else if (!digitsOnly.test(data.UVOICE_ID)) {
-      errors.push("UVOICE ID must contain digits only");
-    }
-
-    if (!data.TARIFF_ID?.trim()) {
-      errors.push("Tariff ID is required");
-    } else if (!digitsOnly.test(data.TARIFF_ID)) {
-      errors.push("Tariff ID must contain digits only");
-    }
-
-    if (!data.TARIFF_NAME?.trim()) {
-      errors.push("Tariff Name is required");
-    } else if (!alphanum.test(data.TARIFF_NAME)) {
-      errors.push("Tariff Name must be alphanumeric");
-    }
-
-    if (!data.MEDIUM?.trim()) {
-      errors.push("Medium is required");
-    } else if (!alpha.test(data.MEDIUM)) {
-      errors.push("Medium must contain only letters");
-    }
-
-    if (!data.PCR?.toString().trim()) {
-      errors.push("PCR is required");
-    } else if (!floatNumber.test(data.PCR)) {
-      errors.push("PCR must be a valid number");
-    }
-
-    if (isUpdate) {
-      if (!data.UPDATED_USER?.trim()) {
-        errors.push("Updated User is required");
-      } else if (!alpha.test(data.UPDATED_USER)) {
-        errors.push("Updated User must contain only letters");
-      }
-    } else {
-      if (!data.CREATED_USER?.trim()) {
-        errors.push("Created User is required");
-      } else if (!alpha.test(data.CREATED_USER)) {
-        errors.push("Created User must contain only letters");
-      }
-
-      // Duplicate check on create
-      if (existingEntries) {
-        const duplicate = existingEntries.some(
-          (item) =>
-            item.UVOICE_ID === data.UVOICE_ID ||
-            item.TARIFF_ID === data.TARIFF_ID
-        );
-        if (duplicate) {
-          errors.push(
-            "A record with the same UVOICE ID or Tariff ID already exists"
-          );
-        }
-      }
-    }
-
-    return errors;
-  }
 };
